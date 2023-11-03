@@ -6,7 +6,7 @@
     ],
     "require": {
         "php": "^7.2 || ^8.0",
-        "doctrine/orm": "^2.7.0"
+        "doctrine/orm": "^2.14.0"
     },
     "require-dev": {
         "doctrine/annotations": "^1.14.3",
