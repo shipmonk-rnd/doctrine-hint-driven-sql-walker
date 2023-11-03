@@ -397,6 +397,12 @@
                 Traversable,
                 Doctrine\Common\Collections\Collection
             "/>
+            <property name="enableMixedTypeHint" value="false"/> <!-- requires PHP 8.0 -->
+            <property name="enableStaticTypeHint" value="false"/> <!-- requires PHP 8.0 -->
+            <property name="enableUnionTypeHint" value="false"/> <!-- requires PHP 8.0 -->
+            <property name="enableIntersectionTypeHint" value="false"/> <!-- requires PHP 8.1 -->
+            <property name="enableNeverTypeHint" value="false"/> <!-- requires PHP 8.1 -->
+            <property name="enableStandaloneNullTrueFalseTypeHints" value="false"/> <!-- requires PHP 8.2 -->
         </properties>
         <exclude name="SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingTraversableTypeHintSpecification"/><!-- this has problems with vendor libs, PHPStan checks this much more reliably -->
     </rule>

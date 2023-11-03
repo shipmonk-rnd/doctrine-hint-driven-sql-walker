@@ -22,7 +22,10 @@ abstract class HintHandler
         return $this->sqlWalker;
     }
 
-    protected function getHintValue(): mixed
+    /**
+     * @return mixed
+     */
+    protected function getHintValue()
     {
         return $this->sqlWalker->getQuery()->getHint(static::class);
     }
