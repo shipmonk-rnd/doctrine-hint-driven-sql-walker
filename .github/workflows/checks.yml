@@ -30,8 +30,16 @@ jobs:
                     wget -q https://github.com/maglnet/ComposerRequireChecker/releases/download/4.5.0/composer-require-checker.phar
 
             -
-                name: Run checks
-                run: composer check
+                name: Check composer normalization
+                run: composer check:composer
+
+            -
+                name: Check editorconfig
+                run: composer check:ec
+
+            -
+                name: Check coding style
+                run: composer check:cs
 
             -
                 name: Check unused dependencies
@@ -41,6 +49,34 @@ jobs:
                 name: Check shadow dependencies
                 run: php composer-require-checker.phar check composer.json
 
+    phpstan:
+        runs-on: ubuntu-latest
+        strategy:
+            fail-fast: false
+        steps:
+            -
+                name: Checkout code
+                uses: actions/checkout@v4
+            -
+                name: Setup PHP
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: 8.2
+            -
+                name: Install dependencies
+                run: composer install --no-progress --prefer-dist --no-interaction
+
+            -
+                name: Run PHPStan (latest deps)
+                run: composer check:types
+
+            -
+                name: Install lowest non-dev dependencies
+                run: composer update --no-progress --prefer-lowest --no-dev --prefer-dist --no-interaction
+
+            -
+                name: Run PHPStan (lowest deps)
+                run: composer check:types
 
     tests:
         runs-on: ubuntu-latest
