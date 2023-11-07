@@ -71,8 +71,8 @@ jobs:
                 run: composer check:types
 
             -
-                name: Install lowest non-dev dependencies
-                run: composer update --no-progress --prefer-lowest --no-dev --prefer-dist --no-interaction
+                name: Install lowest dependencies
+                run: composer update --no-progress --prefer-lowest --prefer-dist --no-interaction
 
             -
                 name: Run PHPStan (lowest deps)

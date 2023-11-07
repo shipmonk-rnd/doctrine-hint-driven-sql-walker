@@ -27,7 +27,7 @@ class HintDrivenSqlWalker extends SqlWalker
      */
     private $stringSqlWalkers = [];
 
-    public function __construct( // @phpstan-ignore-line Unable to replicate PHPStan bug
+    public function __construct(
         $query,
         $parserResult,
         array $queryComponents
