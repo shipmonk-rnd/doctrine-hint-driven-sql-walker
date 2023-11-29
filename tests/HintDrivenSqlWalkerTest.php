@@ -9,6 +9,7 @@ use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\UnderscoreNamingStrategy;
 use Doctrine\ORM\Query;
+use Generator;
 use PHPUnit\Framework\TestCase;
 use ShipMonk\Doctrine\Walker\Handlers\CommentWholeSqlHintHandler;
 use ShipMonk\Doctrine\Walker\Handlers\LowercaseSelectHintHandler;
@@ -41,7 +42,7 @@ class HintDrivenSqlWalkerTest extends TestCase
     }
 
     /**
-     * @return iterable|mixed[][]
+     * @return Generator<string, array{string, class-string<HintHandler>, mixed, string}>
      */
     public static function walksProvider(): iterable
     {
