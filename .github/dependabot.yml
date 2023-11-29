@@ -5,4 +5,5 @@ updates:
         directory: "/"
         schedule:
             interval: monthly
-        versioning-strategy: lockfile-only
+        allow:
+            dependency-type: development
