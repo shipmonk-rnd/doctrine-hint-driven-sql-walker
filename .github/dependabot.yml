@@ -5,15 +5,4 @@ updates:
         directory: "/"
         schedule:
             interval: monthly
-        allow:
-            dependency-type: development
-        versioning-strategy: increase
-
-    -
-        package-ecosystem: composer
-        directory: "/"
-        schedule:
-            interval: monthly
-        allow:
-            dependency-type: production
         versioning-strategy: lockfile-only
