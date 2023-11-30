@@ -17,4 +17,4 @@ parameters:
     ignoreErrors:
         -
             message: '#ShipMonk\\Doctrine\\Walker\\HintDrivenSqlWalker\:\:__construct\(\)#' # unable to replicate PHPStan bug
-            reportUnmatched: true # issue differs with versinos of doctrine/orm
+            reportUnmatched: false # issue differs with versinos of doctrine/orm
