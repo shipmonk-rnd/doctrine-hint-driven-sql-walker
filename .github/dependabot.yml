@@ -6,4 +6,4 @@ updates:
         schedule:
             interval: monthly
         allow:
-            dependency-type: development
+            - dependency-type: development
