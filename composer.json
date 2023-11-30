@@ -9,7 +9,7 @@
         "doctrine/orm": "^2.14.0"
     },
     "require-dev": {
-        "doctrine/annotations": "^1.14.3",
+        "doctrine/annotations": "^2.0.1",
         "editorconfig-checker/editorconfig-checker": "^10.4.0",
         "ergebnis/composer-normalize": "^2.19.0",
         "phpstan/phpstan": "^1.10.38",
