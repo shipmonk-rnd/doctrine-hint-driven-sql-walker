@@ -7,6 +7,14 @@ There just can be only single SqlWalker.
 This library solves this issue, by providing `HintHandler` base class which is designed for SQL modification
 and can be used multiple times in `$queryBuilder->setHint()`.
 
+### Installation:
+
+```sh
+composer require shipmonk/doctrine-hint-driven-sql-walker
+```
+
+### Usage:
+
 ```php
 $queryBuilder
     ->setHint(Query::HINT_CUSTOM_OUTPUT_WALKER, HintDrivenSqlWalker::class)
@@ -41,8 +49,8 @@ class MaxExecutionTimeSqlWalker extends HintHandler
     }
 ```
 
-SqlNode is an enum of all walkXxx methods in Doctrine's SqlWalker, so you are able to intercept any part of AST processing the SqlWalker does.
+SqlNode is an enum of all `walkXxx` methods in Doctrine's SqlWalker, so you are able to intercept any part of AST processing the SqlWalker does.
 
 ### Implementors
-- shipmonk/doctrine-mysql-optimizer-hints (since v2)
-- shipmonk/doctrine-mysql-index-hints (since v3)
+- [shipmonk/doctrine-mysql-optimizer-hints](https://github.com/shipmonk-rnd/doctrine-mysql-optimizer-hints) (since v2)
+- [shipmonk/doctrine-mysql-index-hints](https://github.com/shipmonk-rnd/doctrine-mysql-index-hints) (since v3)
