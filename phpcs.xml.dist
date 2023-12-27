@@ -19,6 +19,7 @@
     <file>tests/</file>
 
     <config name="installed_paths" value="../../slevomat/coding-standard"/>
+    <config name="php_version" value="70200"/>
 
     <rule ref="Generic.Arrays.DisallowLongArraySyntax"/>
     <rule ref="Generic.Classes.DuplicateClassName"/>
@@ -245,9 +246,7 @@
     </rule>
 
     <rule ref="SlevomatCodingStandard.Arrays.TrailingArrayComma"/>
-    <rule ref="SlevomatCodingStandard.Classes.ModernClassNameReference">
-        <exclude name="SlevomatCodingStandard.Classes.ModernClassNameReference.ClassNameReferencedViaFunctionCall"/> <!-- after bumping to PHP8 -->
-    </rule>
+    <rule ref="SlevomatCodingStandard.Classes.ModernClassNameReference"/>
     <rule ref="SlevomatCodingStandard.Classes.ClassConstantVisibility" />
     <rule ref="SlevomatCodingStandard.Classes.ClassStructure">
         <properties>
@@ -303,10 +302,8 @@
     <rule ref="SlevomatCodingStandard.Exceptions.ReferenceThrowableOnly"/>
     <rule ref="SlevomatCodingStandard.Functions.DisallowArrowFunction"/>
     <rule ref="SlevomatCodingStandard.Functions.DisallowNamedArguments"/>
-    <!-- after bumping PHP version
     <rule ref="SlevomatCodingStandard.Functions.RequireTrailingCommaInDeclaration"/>
     <rule ref="SlevomatCodingStandard.Functions.RequireTrailingCommaInCall"/>
-    -->
     <rule ref="SlevomatCodingStandard.Functions.StaticClosure"/>
     <rule ref="SlevomatCodingStandard.Functions.UselessParameterDefaultValue"/>
     <rule ref="SlevomatCodingStandard.Functions.UnusedInheritedVariablePassedToClosure"/>
@@ -346,7 +343,7 @@
         </properties>
     </rule>
     <rule ref="SlevomatCodingStandard.Namespaces.ReferenceUsedNamesOnly.PartialUse"/>
-    <!-- rule ref="SlevomatCodingStandard.Numbers.RequireNumericLiteralSeparator" Since PHP 7.4-->
+    <rule ref="SlevomatCodingStandard.Numbers.RequireNumericLiteralSeparator"/>
     <rule ref="SlevomatCodingStandard.Operators.DisallowEqualOperators" />
     <rule ref="SlevomatCodingStandard.Operators.SpreadOperatorSpacing" />
     <rule ref="SlevomatCodingStandard.PHP.DisallowDirectMagicInvokeCall" />
@@ -365,10 +362,8 @@
     <rule ref="SlevomatCodingStandard.TypeHints.NullTypeHintOnLastPosition" />
     <rule ref="SlevomatCodingStandard.TypeHints.UnionTypeHintFormat" />
     <rule ref="SlevomatCodingStandard.TypeHints.UselessConstantTypeHint" />
-    <!-- after bumping php version to 7.4
     <rule ref="SlevomatCodingStandard.TypeHints.PropertyTypeHint">
         <properties>
-            <property name="enableNativeTypeHint" value="true"/>
             <property name="traversableTypeHints" type="array" value="
                 Generator,
                 Traversable,
@@ -376,8 +371,6 @@
             "/>
         </properties>
     </rule>
-    -->
-
     <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint">
         <properties>
             <property name="traversableTypeHints" type="array" value="
@@ -397,12 +390,6 @@
                 Traversable,
                 Doctrine\Common\Collections\Collection
             "/>
-            <property name="enableMixedTypeHint" value="false"/> <!-- requires PHP 8.0 -->
-            <property name="enableStaticTypeHint" value="false"/> <!-- requires PHP 8.0 -->
-            <property name="enableUnionTypeHint" value="false"/> <!-- requires PHP 8.0 -->
-            <property name="enableIntersectionTypeHint" value="false"/> <!-- requires PHP 8.1 -->
-            <property name="enableNeverTypeHint" value="false"/> <!-- requires PHP 8.1 -->
-            <property name="enableStandaloneNullTrueFalseTypeHints" value="false"/> <!-- requires PHP 8.2 -->
         </properties>
         <exclude name="SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingTraversableTypeHintSpecification"/><!-- this has problems with vendor libs, PHPStan checks this much more reliably -->
     </rule>
