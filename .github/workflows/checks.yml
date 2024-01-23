@@ -6,37 +6,6 @@ on:
             - "master"
             - "v[0-9]"
 jobs:
-    dependencies:
-        runs-on: ubuntu-latest
-        strategy:
-            fail-fast: false
-        steps:
-            -
-                name: Checkout code
-                uses: actions/checkout@v4
-            -
-                name: Setup PHP
-                uses: shivammathur/setup-php@v2
-                with:
-                    php-version: 8.2
-            -
-                name: Install dependencies
-                run: composer install --no-progress --prefer-dist --no-interaction
-
-            -
-                name: Install extra tools
-                run: |
-                    wget -q https://github.com/composer-unused/composer-unused/releases/latest/download/composer-unused.phar
-                    wget -q https://github.com/maglnet/ComposerRequireChecker/releases/download/4.5.0/composer-require-checker.phar
-
-            -
-                name: Check unused dependencies
-                run: php composer-unused.phar --output-format=default
-
-            -
-                name: Check shadow dependencies
-                run: php composer-require-checker.phar check composer.json
-
     checks:
         runs-on: ubuntu-latest
         strategy:
