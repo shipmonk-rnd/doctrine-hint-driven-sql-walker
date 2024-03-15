@@ -15,7 +15,7 @@ class LowercaseSelectHintHandler extends HintHandler
         return [SqlNode::SelectClause];
     }
 
-    public function processNode(string $sqlNode, string $sql): string
+    public function processNode(SqlNode $sqlNode, string $sql): string
     {
         $result = preg_replace('~^SELECT~', 'select', $sql);
 

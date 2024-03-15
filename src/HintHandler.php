@@ -7,10 +7,7 @@ use Doctrine\ORM\Query\SqlWalker;
 abstract class HintHandler
 {
 
-    /**
-     * @var SqlWalker
-     */
-    private $sqlWalker;
+    private SqlWalker $sqlWalker;
 
     final public function __construct(SqlWalker $sqlWalker)
     {
@@ -22,22 +19,16 @@ abstract class HintHandler
         return $this->sqlWalker;
     }
 
-    /**
-     * @return mixed
-     */
-    protected function getHintValue()
+    protected function getHintValue(): mixed
     {
         return $this->sqlWalker->getQuery()->getHint(static::class);
     }
 
     /**
-     * @return list<SqlNode::*>
+     * @return list<SqlNode>
      */
     abstract public function getNodes(): array;
 
-    /**
-     * @param SqlNode::* $sqlNode
-     */
-    abstract public function processNode(string $sqlNode, string $sql): string;
+    abstract public function processNode(SqlNode $sqlNode, string $sql): string;
 
 }

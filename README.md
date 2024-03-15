@@ -55,5 +55,8 @@ SqlNode is an enum of all `walkXxx` methods in Doctrine's SqlWalker, so you are 
 - [shipmonk/doctrine-mysql-optimizer-hints](https://github.com/shipmonk-rnd/doctrine-mysql-optimizer-hints) (since v2)
 - [shipmonk/doctrine-mysql-index-hints](https://github.com/shipmonk-rnd/doctrine-mysql-index-hints) (since v3)
 
-### Supported PHP versions
-- PHP 7.2 - 8.3
+### Compatibility
+| Version | PHP Compatibility | doctrine/orm | doctrine/dbal          |
+|---------| ----------------- |--------------|------------------------|
+| v1      | 7.2 - 8.3         | 2.x          | 2.x           \|\| 3.x |
+| v2      | 8.1 - 8.3         | 3.x          | 4.x                    |
