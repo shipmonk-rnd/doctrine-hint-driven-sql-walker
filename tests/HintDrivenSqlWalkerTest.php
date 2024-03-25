@@ -7,6 +7,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Platforms\MySQL80Platform;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Mapping\Driver\AttributeDriver;
 use Doctrine\ORM\Mapping\UnderscoreNamingStrategy;
 use Doctrine\ORM\Query;
 use Generator;
@@ -26,7 +27,7 @@ class HintDrivenSqlWalkerTest extends TestCase
         string $dql,
         string $handlerClass,
         $hintValue,
-        string $expectedSql
+        string $expectedSql,
     ): void
     {
         $entityManagerMock = $this->createEntityManagerMock();
@@ -70,21 +71,19 @@ class HintDrivenSqlWalkerTest extends TestCase
         $config->setProxyDir('/tmp/doctrine');
         $config->setAutoGenerateProxyClasses(false);
         $config->setSecondLevelCacheEnabled(false);
-        $config->setMetadataDriverImpl($config->newDefaultAnnotationDriver([], false));
+        $config->setMetadataDriverImpl(new AttributeDriver([__DIR__]));
         $config->setNamingStrategy(new UnderscoreNamingStrategy());
 
         $eventManager = $this->createMock(EventManager::class);
         $connectionMock = $this->createMock(Connection::class);
-        $connectionMock->method('getEventManager')
-            ->willReturn($eventManager);
 
         $connectionMock->method('getDatabasePlatform')
             ->willReturn(new MySQL80Platform());
 
-        return EntityManager::create(
+        return new EntityManager(
             $connectionMock,
             $config,
-            $eventManager
+            $eventManager,
         );
     }
 
