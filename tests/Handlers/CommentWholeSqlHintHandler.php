@@ -5,6 +5,7 @@ namespace ShipMonk\Doctrine\Walker\Handlers;
 use LogicException;
 use ShipMonk\Doctrine\Walker\HintHandler;
 use ShipMonk\Doctrine\Walker\SqlNode;
+use function is_string;
 use function preg_replace;
 
 class CommentWholeSqlHintHandler extends HintHandler
@@ -17,7 +18,13 @@ class CommentWholeSqlHintHandler extends HintHandler
 
     public function processNode(SqlNode $sqlNode, string $sql): string
     {
-        $result = preg_replace('~$~', ' -- ' . $this->getHintValue(), $sql);
+        $hintValue = $this->getHintValue();
+
+        if (!is_string($hintValue)) {
+            throw new LogicException('Hint value must be a string');
+        }
+
+        $result = preg_replace('~$~', ' -- ' . $hintValue, $sql);
 
         if ($result === null) {
             throw new LogicException('Regex failure');
