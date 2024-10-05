@@ -9,7 +9,7 @@
         "doctrine/orm": "^3.0.0"
     },
     "require-dev": {
-        "doctrine/dbal": "^4.0",
+        "doctrine/dbal": "^4.1",
         "doctrine/event-manager": "^2.0",
         "editorconfig-checker/editorconfig-checker": "^10.6.0",
         "ergebnis/composer-normalize": "^2.43.0",
