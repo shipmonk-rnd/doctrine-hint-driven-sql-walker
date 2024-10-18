@@ -13,7 +13,7 @@ class CommentWholeSqlHintHandler extends HintHandler
 
     public function getNodes(): array
     {
-        return [SqlNode::SelectStatement];
+        return [SqlNode::SelectStatement, SqlNode::UpdateStatement, SqlNode::DeleteStatement];
     }
 
     public function processNode(SqlNode $sqlNode, string $sql): string

@@ -1,16 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+        xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd"
         colors="true"
         bootstrap="vendor/autoload.php"
         beStrictAboutOutputDuringTests="true"
         beStrictAboutChangesToGlobalState="true"
         beStrictAboutCoverageMetadata="true"
+        beStrictAboutTestsThatDoNotTestAnything="true"
         failOnRisky="true"
+        failOnIncomplete="true"
+        failOnDeprecation="true"
+        failOnNotice="true"
         failOnWarning="true"
-        cacheResultFile="cache/phpunit.result.cache"
+
+        displayDetailsOnTestsThatTriggerDeprecations="true"
+        displayDetailsOnTestsThatTriggerNotices="true"
+        displayDetailsOnTestsThatTriggerWarnings="true"
+        displayDetailsOnTestsThatTriggerErrors="true"
+
+        cacheDirectory="cache/phpunit"
 >
     <php>
         <ini name="error_reporting" value="-1"/>
+        <env name="DOCTRINE_DEPRECATIONS" value="trigger"/>
     </php>
+    <source ignoreSuppressionOfDeprecations="true">
+        <include>
+            <directory>tests</directory>
+        </include>
+    </source>
 </phpunit>
