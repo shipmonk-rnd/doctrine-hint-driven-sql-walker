@@ -11,15 +11,15 @@
     "require-dev": {
         "doctrine/dbal": "^4.0",
         "doctrine/event-manager": "^2.0",
-        "editorconfig-checker/editorconfig-checker": "^10.6.0",
-        "ergebnis/composer-normalize": "^2.43.0",
-        "phpstan/phpstan": "^1.12.5",
-        "phpstan/phpstan-phpunit": "^1.4.0",
-        "phpstan/phpstan-strict-rules": "^1.6.0",
-        "phpunit/phpunit": "^10.5.24",
-        "shipmonk/composer-dependency-analyser": "^1.5.3",
-        "shipmonk/phpstan-rules": "^3.0",
-        "slevomat/coding-standard": "^8.15.0"
+        "editorconfig-checker/editorconfig-checker": "10.6.0",
+        "ergebnis/composer-normalize": "2.44.0",
+        "phpstan/phpstan": "1.12.6",
+        "phpstan/phpstan-phpunit": "1.4.0",
+        "phpstan/phpstan-strict-rules": "1.6.1",
+        "phpunit/phpunit": "10.5.36",
+        "shipmonk/composer-dependency-analyser": "1.7.0",
+        "shipmonk/phpstan-rules": "3.2.1",
+        "slevomat/coding-standard": "8.15.0"
     },
     "autoload": {
         "psr-4": {
@@ -48,12 +48,15 @@
             "@check:tests",
             "@check:dependencies"
         ],
-        "check:composer": "composer normalize --dry-run --no-check-lock --no-update-lock",
+        "check:composer": [
+            "composer normalize --dry-run --no-check-lock --no-update-lock",
+            "composer validate --strict"
+        ],
         "check:cs": "phpcs",
         "check:dependencies": "composer-dependency-analyser",
         "check:ec": "ec src tests",
         "check:tests": "phpunit tests",
-        "check:types": "phpstan analyse -vvv",
+        "check:types": "phpstan analyse --ansi -vv",
         "fix:cs": "phpcbf"
     }
 }
