@@ -20,13 +20,12 @@ class HintDrivenSqlWalkerTest extends TestCase
 {
 
     /**
-     * @param mixed $hintValue
      * @dataProvider walksProvider
      */
     public function testWalker(
         string $dql,
         string $handlerClass,
-        $hintValue,
+        mixed $hintValue,
         string $expectedSql,
     ): void
     {
@@ -56,11 +55,25 @@ class HintDrivenSqlWalkerTest extends TestCase
             'select d0_.id AS id_0 FROM dummy_entity d0_',
         ];
 
-        yield 'Comment whole sql' => [
+        yield 'Comment whole sql - select' => [
             $selectDql,
             CommentWholeSqlHintHandler::class,
             'custom comment',
             'SELECT d0_.id AS id_0 FROM dummy_entity d0_ -- custom comment',
+        ];
+
+        yield 'Comment whole sql - update' => [
+            sprintf('UPDATE %s w SET w.id = 1', DummyEntity::class),
+            CommentWholeSqlHintHandler::class,
+            'custom comment',
+            'UPDATE dummy_entity SET id = 1 -- custom comment',
+        ];
+
+        yield 'Comment whole sql - delete' => [
+            sprintf('DELETE FROM %s w', DummyEntity::class),
+            CommentWholeSqlHintHandler::class,
+            'custom comment',
+            'DELETE FROM dummy_entity -- custom comment',
         ];
     }
 
