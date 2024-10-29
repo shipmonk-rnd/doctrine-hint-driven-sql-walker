@@ -51,6 +51,11 @@ class MaxExecutionTimeSqlWalker extends HintHandler
 
 SqlNode is an enum of all `walkXxx` methods in Doctrine's SqlWalker, so you are able to intercept any part of AST processing the SqlWalker does.
 
+### Limitations
+- Please note that since [doctrine/orm 3.3.0](https://github.com/doctrine/orm/pull/11188), the produced SQL gets finalized with `LIMIT` / `OFFSET` / `FOR UPDATE` after `SqlWalker` processing is done.
+  - Thus, implementors should be aware that those SQL parts can be appended to the SQL after `HintHandler` processing.
+  - This means that e.g. placing a comment at the end of the SQL breaks LIMIT functionality completely
+
 ### Implementors
 - [shipmonk/doctrine-mysql-optimizer-hints](https://github.com/shipmonk-rnd/doctrine-mysql-optimizer-hints) (since v2)
 - [shipmonk/doctrine-mysql-index-hints](https://github.com/shipmonk-rnd/doctrine-mysql-index-hints) (since v3)

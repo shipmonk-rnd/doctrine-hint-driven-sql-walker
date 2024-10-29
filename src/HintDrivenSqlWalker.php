@@ -53,19 +53,15 @@ use Doctrine\ORM\Query\AST\UpdateClause;
 use Doctrine\ORM\Query\AST\UpdateItem;
 use Doctrine\ORM\Query\AST\UpdateStatement;
 use Doctrine\ORM\Query\AST\WhereClause;
-use Doctrine\ORM\Query\Exec\PreparedExecutorFinalizer;
-use Doctrine\ORM\Query\Exec\SingleSelectSqlFinalizer;
-use Doctrine\ORM\Query\Exec\SqlFinalizer;
-use Doctrine\ORM\Query\OutputWalker;
 use Doctrine\ORM\Query\Parser;
-use Doctrine\ORM\Query\SqlWalker;
+use Doctrine\ORM\Query\SqlOutputWalker;
 use LogicException;
 use function is_a;
 
 /**
  * @psalm-import-type QueryComponent from Parser
  */
-class HintDrivenSqlWalker extends SqlWalker implements OutputWalker
+class HintDrivenSqlWalker extends SqlOutputWalker
 {
 
     /**
@@ -95,20 +91,10 @@ class HintDrivenSqlWalker extends SqlWalker implements OutputWalker
         }
     }
 
-    public function getFinalizer(DeleteStatement|UpdateStatement|SelectStatement $AST): SqlFinalizer
+    protected function createSqlForFinalizer(SelectStatement $selectStatement): string
     {
-        switch (true) {
-            case $AST instanceof SelectStatement:
-                return new SingleSelectSqlFinalizer($this->walkSelectStatement($AST));
-
-            case $AST instanceof UpdateStatement:
-                return new PreparedExecutorFinalizer($this->createUpdateStatementExecutor($AST));
-
-            case $AST instanceof DeleteStatement: // @phpstan-ignore instanceof.alwaysTrue (keep it readable)
-                return new PreparedExecutorFinalizer($this->createDeleteStatementExecutor($AST));
-        }
-
-        throw new LogicException('Unexpected AST node type');
+        $selectStatementSql = parent::createSqlForFinalizer($selectStatement);
+        return $this->callWalkers(SqlNode::SelectStatement, $selectStatementSql);
     }
 
     public function walkSelectStatement(SelectStatement $AST): string
