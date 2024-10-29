@@ -15,7 +15,6 @@ use PHPUnit\Framework\TestCase;
 use ShipMonk\Doctrine\Walker\Handlers\CommentWholeSqlHintHandler;
 use ShipMonk\Doctrine\Walker\Handlers\LowercaseSelectHintHandler;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
-use function sprintf;
 
 class HintDrivenSqlWalkerTest extends TestCase
 {
@@ -77,47 +76,74 @@ class HintDrivenSqlWalkerTest extends TestCase
      */
     public static function walksProvider(): iterable
     {
-        $selectDql = sprintf('SELECT w FROM %s w', DummyEntity::class);
+        $selectQueryCallback = static function (EntityManager $entityManager): Query {
+            return $entityManager->createQueryBuilder()
+                ->select('w')
+                ->from(DummyEntity::class, 'w')
+                ->getQuery();
+        };
+
+        $selectWithLimitQueryCallback = static function (EntityManager $entityManager): Query {
+            return $entityManager->createQueryBuilder()
+                ->select('w')
+                ->from(DummyEntity::class, 'w')
+                ->setMaxResults(1)
+                ->getQuery();
+        };
+
+        $updateQueryCallback = static function (EntityManager $entityManager): Query {
+            return $entityManager->createQueryBuilder()
+                ->update(DummyEntity::class, 'w')
+                ->set('w.id', 1)
+                ->getQuery();
+        };
+
+        $deleteQueryCallback = static function (EntityManager $entityManager): Query {
+            return $entityManager->createQueryBuilder()
+                ->delete(DummyEntity::class, 'w')
+                ->getQuery();
+        };
 
         yield 'Lowercase select' => [
-            static fn(EntityManager $entityManager): Query => $entityManager->createQuery($selectDql),
+            $selectQueryCallback,
             LowercaseSelectHintHandler::class,
             null,
             'select d0_.id AS id_0 FROM dummy_entity d0_',
         ];
 
+        yield 'Lowercase select with LIMIT' => [
+            $selectWithLimitQueryCallback,
+            LowercaseSelectHintHandler::class,
+            null,
+            'select d0_.id AS id_0 FROM dummy_entity d0_ LIMIT 1',
+        ];
+
         yield 'Comment whole sql - select' => [
-            static fn(EntityManager $entityManager): Query => $entityManager->createQuery($selectDql),
+            $selectQueryCallback,
             CommentWholeSqlHintHandler::class,
             'custom comment',
             'SELECT d0_.id AS id_0 FROM dummy_entity d0_ -- custom comment',
         ];
 
+        yield 'Comment whole sql - select with LIMIT' => [
+            $selectWithLimitQueryCallback,
+            CommentWholeSqlHintHandler::class,
+            'custom comment',
+            'SELECT d0_.id AS id_0 FROM dummy_entity d0_ -- custom comment LIMIT 1', // see readme limitations
+        ];
+
         yield 'Comment whole sql - update' => [
-            static fn(EntityManager $entityManager): Query => $entityManager->createQuery(sprintf('UPDATE %s w SET w.id = 1', DummyEntity::class)),
+            $updateQueryCallback,
             CommentWholeSqlHintHandler::class,
             'custom comment',
             'UPDATE dummy_entity SET id = 1 -- custom comment',
         ];
 
         yield 'Comment whole sql - delete' => [
-            static fn(EntityManager $entityManager): Query => $entityManager->createQuery(sprintf('DELETE FROM %s w', DummyEntity::class)),
+            $deleteQueryCallback,
             CommentWholeSqlHintHandler::class,
             'custom comment',
             'DELETE FROM dummy_entity -- custom comment',
-        ];
-
-        yield 'Comment whole sql with LIMIT' => [
-            static function (EntityManager $entityManager): Query {
-                return $entityManager->createQueryBuilder()
-                    ->select('w')
-                    ->from(DummyEntity::class, 'w')
-                    ->setMaxResults(1)
-                    ->getQuery();
-            },
-            CommentWholeSqlHintHandler::class,
-            'custom comment',
-            'SELECT d0_.id AS id_0 FROM dummy_entity d0_ -- custom comment LIMIT 1', // see readme limitations
         ];
     }
 
