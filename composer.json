@@ -20,7 +20,7 @@
         "shipmonk/composer-dependency-analyser": "1.7.0",
         "shipmonk/phpstan-rules": "3.2.1",
         "slevomat/coding-standard": "8.15.0",
-        "symfony/cache": "^6.4"
+        "symfony/cache": "^6.4.13"
     },
     "autoload": {
         "psr-4": {
