@@ -14,6 +14,7 @@ use Generator;
 use PHPUnit\Framework\TestCase;
 use ShipMonk\Doctrine\Walker\Handlers\CommentWholeSqlHintHandler;
 use ShipMonk\Doctrine\Walker\Handlers\LowercaseSelectHintHandler;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use function sprintf;
 
 class HintDrivenSqlWalkerTest extends TestCase
@@ -38,6 +39,37 @@ class HintDrivenSqlWalkerTest extends TestCase
         $producedSql = $query->getSQL();
 
         self::assertSame($expectedSql, $producedSql);
+    }
+
+    public function testPagination(): void
+    {
+        $pageSize = 10;
+        $entityManagerMock = $this->createEntityManagerMock();
+
+        self::assertNotNull(
+            $entityManagerMock->getConfiguration()->getQueryCache(),
+            'QueryCache needed. The purpose of this test is to ensure that we do not break the pagination by using a cache',
+        );
+
+        $expectedSqls = [
+            'select d0_.id AS id_0 FROM dummy_entity d0_ LIMIT 10',
+            'select d0_.id AS id_0 FROM dummy_entity d0_ LIMIT 10 OFFSET 10',
+            'select d0_.id AS id_0 FROM dummy_entity d0_ LIMIT 10 OFFSET 20',
+        ];
+
+        foreach ([0, 1, 2] as $page) {
+            $query = $entityManagerMock->createQueryBuilder()
+                ->select('w')
+                ->from(DummyEntity::class, 'w')
+                ->getQuery()
+                ->setHint(Query::HINT_CUSTOM_OUTPUT_WALKER, HintDrivenSqlWalker::class)
+                ->setHint(LowercaseSelectHintHandler::class, null)
+                ->setFirstResult($page * $pageSize)
+                ->setMaxResults($pageSize);
+            $producedSql = $query->getSQL();
+
+            self::assertSame($expectedSqls[$page], $producedSql, 'Page ' . $page . ' failed:');
+        }
     }
 
     /**
@@ -85,7 +117,7 @@ class HintDrivenSqlWalkerTest extends TestCase
             },
             CommentWholeSqlHintHandler::class,
             'custom comment',
-            'SELECT d0_.id AS id_0 FROM dummy_entity d0_ LIMIT 1 -- custom comment',
+            'SELECT d0_.id AS id_0 FROM dummy_entity d0_ -- custom comment LIMIT 1', // see readme limitations
         ];
     }
 
@@ -94,6 +126,7 @@ class HintDrivenSqlWalkerTest extends TestCase
         $config = new Configuration();
         $config->setProxyNamespace('Tmp\Doctrine\Tests\Proxies');
         $config->setProxyDir('/tmp/doctrine');
+        $config->setQueryCache(new ArrayAdapter());
         $config->setAutoGenerateProxyClasses(false);
         $config->setSecondLevelCacheEnabled(false);
         $config->setMetadataDriverImpl(new AttributeDriver([__DIR__]));
