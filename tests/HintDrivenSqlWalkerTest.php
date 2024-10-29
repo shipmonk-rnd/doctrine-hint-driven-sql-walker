@@ -20,10 +20,11 @@ class HintDrivenSqlWalkerTest extends TestCase
 {
 
     /**
+     * @param callable(EntityManager):Query $queryCallback
      * @dataProvider walksProvider
      */
     public function testWalker(
-        string $dql,
+        callable $queryCallback,
         string $handlerClass,
         mixed $hintValue,
         string $expectedSql,
@@ -31,9 +32,7 @@ class HintDrivenSqlWalkerTest extends TestCase
     {
         $entityManagerMock = $this->createEntityManagerMock();
 
-        $query = new Query($entityManagerMock);
-        $query->setDQL($dql);
-
+        $query = $queryCallback($entityManagerMock);
         $query->setHint(Query::HINT_CUSTOM_OUTPUT_WALKER, HintDrivenSqlWalker::class);
         $query->setHint($handlerClass, $hintValue);
         $producedSql = $query->getSQL();
@@ -42,38 +41,51 @@ class HintDrivenSqlWalkerTest extends TestCase
     }
 
     /**
-     * @return Generator<string, array{string, class-string<HintHandler>, mixed, string}>
+     * @return Generator<string, array{callable(EntityManager):Query, class-string<HintHandler>, mixed, string}>
      */
     public static function walksProvider(): iterable
     {
         $selectDql = sprintf('SELECT w FROM %s w', DummyEntity::class);
 
         yield 'Lowercase select' => [
-            $selectDql,
+            static fn(EntityManager $entityManager): Query => $entityManager->createQuery($selectDql),
             LowercaseSelectHintHandler::class,
             null,
             'select d0_.id AS id_0 FROM dummy_entity d0_',
         ];
 
         yield 'Comment whole sql - select' => [
-            $selectDql,
+            static fn(EntityManager $entityManager): Query => $entityManager->createQuery($selectDql),
             CommentWholeSqlHintHandler::class,
             'custom comment',
             'SELECT d0_.id AS id_0 FROM dummy_entity d0_ -- custom comment',
         ];
 
         yield 'Comment whole sql - update' => [
-            sprintf('UPDATE %s w SET w.id = 1', DummyEntity::class),
+            static fn(EntityManager $entityManager): Query => $entityManager->createQuery(sprintf('UPDATE %s w SET w.id = 1', DummyEntity::class)),
             CommentWholeSqlHintHandler::class,
             'custom comment',
             'UPDATE dummy_entity SET id = 1 -- custom comment',
         ];
 
         yield 'Comment whole sql - delete' => [
-            sprintf('DELETE FROM %s w', DummyEntity::class),
+            static fn(EntityManager $entityManager): Query => $entityManager->createQuery(sprintf('DELETE FROM %s w', DummyEntity::class)),
             CommentWholeSqlHintHandler::class,
             'custom comment',
             'DELETE FROM dummy_entity -- custom comment',
+        ];
+
+        yield 'Comment whole sql with LIMIT' => [
+            static function (EntityManager $entityManager): Query {
+                return $entityManager->createQueryBuilder()
+                    ->select('w')
+                    ->from(DummyEntity::class, 'w')
+                    ->setMaxResults(1)
+                    ->getQuery();
+            },
+            CommentWholeSqlHintHandler::class,
+            'custom comment',
+            'SELECT d0_.id AS id_0 FROM dummy_entity d0_ LIMIT 1 -- custom comment',
         ];
     }
 

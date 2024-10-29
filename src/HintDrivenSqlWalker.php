@@ -54,7 +54,6 @@ use Doctrine\ORM\Query\AST\UpdateItem;
 use Doctrine\ORM\Query\AST\UpdateStatement;
 use Doctrine\ORM\Query\AST\WhereClause;
 use Doctrine\ORM\Query\Exec\PreparedExecutorFinalizer;
-use Doctrine\ORM\Query\Exec\SingleSelectSqlFinalizer;
 use Doctrine\ORM\Query\Exec\SqlFinalizer;
 use Doctrine\ORM\Query\OutputWalker;
 use Doctrine\ORM\Query\Parser;
@@ -99,7 +98,7 @@ class HintDrivenSqlWalker extends SqlWalker implements OutputWalker
     {
         switch (true) {
             case $AST instanceof SelectStatement:
-                return new SingleSelectSqlFinalizer($this->walkSelectStatement($AST));
+                return new NoopSqlFinalizer($this->walkSelectStatement($AST));
 
             case $AST instanceof UpdateStatement:
                 return new PreparedExecutorFinalizer($this->createUpdateStatementExecutor($AST));
