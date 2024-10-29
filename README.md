@@ -1,6 +1,6 @@
 ## SqlWalker for Doctrine allowing multiple handlers to modify resulting SQL
 
-Since Doctrine's [SqlWalker](https://www.doctrine-project.org/projects/doctrine-orm/en/2.9/cookbook/dql-custom-walkers.html#modify-the-output-walker-to-generate-vendor-specific-sql) serves as a translator from DQL AST to SQL,
+Since Doctrine's [SqlWalker](https://www.doctrine-project.org/projects/doctrine-orm/en/3.3/cookbook/dql-custom-walkers.html#modify-the-output-walker-to-generate-vendor-specific-sql) serves as a translator from DQL AST to SQL,
 it becomes problematic when you want to alter resulting SQL within multiple libraries by such approach.
 There just can be only single SqlWalker.
 
