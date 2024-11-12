@@ -2,6 +2,7 @@
 
 namespace ShipMonk\Doctrine\Walker;
 
+use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\AST\AggregateExpression;
 use Doctrine\ORM\Query\AST\ArithmeticExpression;
 use Doctrine\ORM\Query\AST\BetweenExpression;
@@ -54,6 +55,7 @@ use Doctrine\ORM\Query\AST\UpdateItem;
 use Doctrine\ORM\Query\AST\UpdateStatement;
 use Doctrine\ORM\Query\AST\WhereClause;
 use Doctrine\ORM\Query\Parser;
+use Doctrine\ORM\Query\ParserResult;
 use Doctrine\ORM\Query\SqlOutputWalker;
 use LogicException;
 use function is_a;
@@ -70,8 +72,8 @@ class HintDrivenSqlWalker extends SqlOutputWalker
     private array $stringSqlWalkers = [];
 
     public function __construct(
-        $query,
-        $parserResult,
+        Query $query,
+        ParserResult $parserResult,
         array $queryComponents,
     )
     {
