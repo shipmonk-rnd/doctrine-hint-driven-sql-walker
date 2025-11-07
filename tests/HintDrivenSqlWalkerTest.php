@@ -5,6 +5,7 @@ namespace ShipMonk\Doctrine\Walker;
 use Doctrine\Common\EventManager;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Platforms\MySQL80Platform;
+use Doctrine\Deprecations\Deprecation;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\Driver\AttributeDriver;
@@ -149,11 +150,14 @@ class HintDrivenSqlWalkerTest extends TestCase
 
     private function createEntityManagerMock(): EntityManager
     {
+        // Ignore deprecations for proxy configuration which is required in ORM 3.x but deprecated for 4.0
+        Deprecation::ignoreDeprecations('https://github.com/doctrine/orm/pull/12005');
+
         $config = new Configuration();
-        $config->setProxyNamespace('Tmp\Doctrine\Tests\Proxies');
         $config->setProxyDir('/tmp/doctrine');
-        $config->setQueryCache(new ArrayAdapter());
+        $config->setProxyNamespace('Tmp\Doctrine\Tests\Proxies');
         $config->setAutoGenerateProxyClasses(false);
+        $config->setQueryCache(new ArrayAdapter());
         $config->setSecondLevelCacheEnabled(false);
         $config->setMetadataDriverImpl(new AttributeDriver([__DIR__]));
         $config->setNamingStrategy(new UnderscoreNamingStrategy());
