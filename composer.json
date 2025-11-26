@@ -6,7 +6,7 @@
     ],
     "require": {
         "php": "^8.1",
-        "doctrine/orm": "^3.3.4"
+        "doctrine/orm": "^3.5.3"
     },
     "require-dev": {
         "doctrine/dbal": "^4.0",
