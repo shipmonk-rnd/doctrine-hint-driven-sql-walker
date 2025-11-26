@@ -23,6 +23,7 @@ class HintDrivenSqlWalkerTest extends TestCase
 
     /**
      * @param callable(EntityManager):Query $queryCallback
+     *
      * @dataProvider walksProvider
      */
     public function testWalker(

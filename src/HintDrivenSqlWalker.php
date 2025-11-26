@@ -119,7 +119,10 @@ class HintDrivenSqlWalker extends SqlOutputWalker
         return $this->callWalkers(SqlNode::EntityIdentificationVariable, parent::walkEntityIdentificationVariable($identVariable));
     }
 
-    public function walkIdentificationVariable(string $identificationVariable, string|null $fieldName = null): string
+    public function walkIdentificationVariable(
+        string $identificationVariable,
+        ?string $fieldName = null,
+    ): string
     {
         return $this->callWalkers(SqlNode::IdentificationVariable, parent::walkIdentificationVariable($identificationVariable, $fieldName));
     }
@@ -233,7 +236,10 @@ class HintDrivenSqlWalker extends SqlOutputWalker
         return $this->callWalkers(SqlNode::ParenthesisExpression, parent::walkParenthesisExpression($parenthesisExpression));
     }
 
-    public function walkNewObject(NewObjectExpression $newObjectExpression, string|null $newObjectResultAlias = null): string
+    public function walkNewObject(
+        NewObjectExpression $newObjectExpression,
+        ?string $newObjectResultAlias = null,
+    ): string
     {
         return $this->callWalkers(SqlNode::NewObject, parent::walkNewObject($newObjectExpression, $newObjectResultAlias));
     }
@@ -273,7 +279,7 @@ class HintDrivenSqlWalker extends SqlOutputWalker
         return $this->callWalkers(SqlNode::UpdateItem, parent::walkUpdateItem($updateItem));
     }
 
-    public function walkWhereClause(WhereClause|null $whereClause): string
+    public function walkWhereClause(?WhereClause $whereClause): string
     {
         return $this->callWalkers(SqlNode::WhereClause, parent::walkWhereClause($whereClause));
     }
@@ -403,7 +409,10 @@ class HintDrivenSqlWalker extends SqlOutputWalker
         return $this->callWalkers(SqlNode::ResultVariable, parent::walkResultVariable($resultVariable));
     }
 
-    private function callWalkers(SqlNode $sqlNode, string $sql): string
+    private function callWalkers(
+        SqlNode $sqlNode,
+        string $sql,
+    ): string
     {
         foreach ($this->stringSqlWalkers[$sqlNode->value] ?? [] as $stringSqlWalker) {
             $sql = $stringSqlWalker->processNode($sqlNode, $sql);

@@ -29,6 +29,9 @@ abstract class HintHandler
      */
     abstract public function getNodes(): array;
 
-    abstract public function processNode(SqlNode $sqlNode, string $sql): string;
+    abstract public function processNode(
+        SqlNode $sqlNode,
+        string $sql,
+    ): string;
 
 }

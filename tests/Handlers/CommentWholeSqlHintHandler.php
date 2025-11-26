@@ -16,7 +16,10 @@ class CommentWholeSqlHintHandler extends HintHandler
         return [SqlNode::SelectStatement, SqlNode::UpdateStatement, SqlNode::DeleteStatement];
     }
 
-    public function processNode(SqlNode $sqlNode, string $sql): string
+    public function processNode(
+        SqlNode $sqlNode,
+        string $sql,
+    ): string
     {
         $hintValue = $this->getHintValue();
 
