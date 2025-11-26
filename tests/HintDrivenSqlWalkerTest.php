@@ -153,9 +153,9 @@ class HintDrivenSqlWalkerTest extends TestCase
     {
         $config = new Configuration();
 
-        // Use native lazy objects on PHP 8.4+ (Doctrine ORM 3.4+), otherwise fall back to old proxy configuration
         if (PHP_VERSION_ID >= 8_04_00 && method_exists($config, 'enableNativeLazyObjects')) {
             $config->enableNativeLazyObjects(true);
+
         } else {
             $config->setProxyNamespace('Tmp\Doctrine\Tests\Proxies');
             $config->setProxyDir('/tmp/doctrine');

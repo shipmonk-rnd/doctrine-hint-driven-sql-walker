@@ -19,4 +19,9 @@ parameters:
     ignoreErrors:
         -
             message: '#ShipMonk\\Doctrine\\Walker\\HintDrivenSqlWalker\:\:__construct\(\)#' # unable to replicate PHPStan bug
-            reportUnmatched: false # issue differs with versinos of doctrine/orm
+            reportUnmatched: false # issue differs with versions of doctrine/orm
+
+        -
+            message: '#enableNativeLazy#'
+            identifier: function.alreadyNarrowedType
+            reportUnmatched: false # issue differs with versions of doctrine/orm
