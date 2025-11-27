@@ -15,6 +15,8 @@ use PHPUnit\Framework\TestCase;
 use ShipMonk\Doctrine\Walker\Handlers\CommentWholeSqlHintHandler;
 use ShipMonk\Doctrine\Walker\Handlers\LowercaseSelectHintHandler;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
+use function method_exists;
+use const PHP_VERSION_ID;
 
 class HintDrivenSqlWalkerTest extends TestCase
 {
@@ -150,10 +152,17 @@ class HintDrivenSqlWalkerTest extends TestCase
     private function createEntityManagerMock(): EntityManager
     {
         $config = new Configuration();
-        $config->setProxyNamespace('Tmp\Doctrine\Tests\Proxies');
-        $config->setProxyDir('/tmp/doctrine');
+
+        if (PHP_VERSION_ID >= 8_04_00 && method_exists($config, 'enableNativeLazyObjects')) {
+            $config->enableNativeLazyObjects(true);
+
+        } else {
+            $config->setProxyNamespace('Tmp\Doctrine\Tests\Proxies');
+            $config->setProxyDir('/tmp/doctrine');
+            $config->setAutoGenerateProxyClasses(false);
+        }
+
         $config->setQueryCache(new ArrayAdapter());
-        $config->setAutoGenerateProxyClasses(false);
         $config->setSecondLevelCacheEnabled(false);
         $config->setMetadataDriverImpl(new AttributeDriver([__DIR__]));
         $config->setNamingStrategy(new UnderscoreNamingStrategy());
