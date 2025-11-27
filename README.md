@@ -17,6 +17,7 @@ composer require shipmonk/doctrine-hint-driven-sql-walker
 
 ```php
 $queryBuilder
+    ->getQuery()
     ->setHint(Query::HINT_CUSTOM_OUTPUT_WALKER, HintDrivenSqlWalker::class)
     ->setHint(MaxExecutionTimeHintHandler::class, 1000)
 ```
